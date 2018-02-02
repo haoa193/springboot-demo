@@ -1,0 +1,58 @@
+spring:
+  application:
+    name: springbootdemo
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/springbootdemo?useUnicode=true&characterEncoding=UTF-8&rewriteBatchedStatements=true
+    username: root
+    password: 123456
+    initial-size: 5
+    min-idle: 5
+    max-active: 20
+    max-wait: 60000
+    validationQuery: SELECT 1 FROM DUAL
+    testOnBorrow: false
+    testOnReturn: false
+    testWhileIdle: true
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 25200000
+    removeAbandoned: true
+    removeAbandonedTimeout: 1800
+    logAbandoned: true
+    connectionInitSqls: set names utf8mb4;
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 500
+    maxOpenPreparedStatements: 500
+    filters: slf4j
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${file.upload.dir}
+  http:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+    encoding:
+      charset: utf-8
+      enabled: true
+      force: true
+file.upload.dir: /Users/chenyong/Downloads/
+
+#springfox.documentation.swagger.v2.host : app.mshoufu.com:8090/api
+
+# server
+server:
+  port: 8192
+  context-path: /
+
+# mybatis
+mybatis:
+  type-aliases-package: com.spkitty.dao
+  mapper-locations: mapper/*Mapper.xml
+
+
+logging:
+  level:
+    root: info
+    com.haoa193.springbootdemo: debug

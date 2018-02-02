@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haoa193.springbootdemo.dao.UserLogMapper" >
+
+	<resultMap id="baseResultMap" type="com.haoa193.springbootdemo.entity.usr.UserLog">
+		<id column="id" property="id" />
+		<result column="user_id" property="userId" />
+		<result column="project_id" property="projectId" />
+		<result column="operation" property="operation" />
+		<result column="operator_id" property="operatorId" />
+		<result column="operated_time" property="operatedTime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+
+	<sql id="baseColumn">id,user_id,project_id,operation,operator_id,operated_time,remark</sql>
+
+	<insert id="insert" parameterType="com.haoa193.springbootdemo.entity.usr.UserLog">
+	  insert into `usr_user_log` (id,user_id,project_id,operation,operator_id,operated_time,remark)
+	  values (#{id},#{userId},#{projectId},#{operation},#{operatorId},#{operatedTime},#{remark})
+	</insert>
+
+	<delete id="delete">
+		delete from `usr_user_log` where id = #{id}
+	</delete>
+
+	<update id="update" parameterType="com.haoa193.springbootdemo.entity.usr.UserLog">
+		update `usr_user_log`
+		<set>
+			user_id = #{userId},
+			project_id = #{projectId},
+			operation = #{operation},
+			operator_id = #{operatorId},
+			operated_time = #{operatedTime},
+			remark = #{remark},
+		</set>
+		where id = #{id}
+	</update>
+
+	<update id="merge">
+		update `usr_user_log`
+			<set>
+				<foreach collection="fields" item="field">
+				<choose>
+					<when test="field == 'userId'">user_id = #{userLog.userId},</when>
+					<when test="field == 'projectId'">project_id = #{userLog.projectId},</when>
+					<when test="field == 'operation'">operation = #{userLog.operation},</when>
+					<when test="field == 'operatorId'">operator_id = #{userLog.operatorId},</when>
+					<when test="field == 'operatedTime'">operated_time = #{userLog.operatedTime},</when>
+					<when test="field == 'remark'">remark = #{userLog.remark},</when>
+				</choose>
+				</foreach>
+			</set>
+		where id = #{userLog.id}
+	</update>
+
+	<select id="findOne" resultMap="baseResultMap">
+		select
+		<include refid="baseColumn"/>
+		from `usr_user_log`
+		where id = #{id}
+	</select>
+
+	<select id="findAll" resultMap="baseResultMap" parameterType="com.haoa193.springbootdemo.model.query.UserLogQueryModel">
+		select
+		<include refid="baseColumn"/>
+		from `usr_user_log`
+		<where>
+			<if test="projectIdEQ != null">
+				and project_id = #{projectIdEQ}
+			</if>
+			<if test="userIdEQ != null">
+				and user_id = #{userIdEQ}
+			</if>
+		</where>
+		<choose>
+			<when test="orderByAndDirection != null">
+				order by ${orderByAndDirection}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null">
+			limit #{offset}, #{pageSize}
+		</if>
+	</select>
+
+	<select id="count" resultType="_long" parameterType="com.haoa193.springbootdemo.model.query.UserLogQueryModel">
+		select count(*) from `usr_user_log`
+		<where>
+			<if test="projectIdEQ != null">
+				and project_id = #{projectIdEQ}
+			</if>
+			<if test="userIdEQ != null">
+				and user_id = #{userIdEQ}
+			</if>
+		</where>
+	</select>
+
+</mapper>
